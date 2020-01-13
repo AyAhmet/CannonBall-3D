@@ -1784,7 +1784,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1845,6 +1845,8 @@ MonoBehaviour:
   starObject: {fileID: 6209863668490446218, guid: 4542782b05e4f465e816835694ff4343,
     type: 3}
   restartButtonObject: {fileID: 275489094538826906, guid: aaa8627292ddb41feb9e56cd2fc754b0,
+    type: 3}
+  endLevelPanel: {fileID: 8743730674998218853, guid: 806475aa208a04443a258f1ff03dc4d3,
     type: 3}
   numberOfTargets: 4
   numberOfProjections: 8

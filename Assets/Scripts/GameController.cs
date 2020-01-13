@@ -14,23 +14,25 @@ public class GameController : MonoBehaviour
     [Header("UI Objects")]
     public GameObject starObject;
     public GameObject restartButtonObject;
+    public GameObject endLevelPanel;
 
     [Header("Attiributes")]
     public int numberOfTargets;
     public int numberOfProjections;
-    public float vel = 0; // Initial velocity applied to ball.
-
-    private Vector3 buttonDownPosition, buttonPosition, buttonUpPosition, ballInstantiatePosition, difference;
 
     private List<GameObject> projections = new List<GameObject>();
     private List<Vector3> projectionPositions = new List<Vector3>();
     private List<GameObject> ballClones = new List<GameObject>();
     private List<GameObject> stars = new List<GameObject>();
 
-    private GameObject hitObjectFound;
     private Canvas canvas;
+    private GameObject restartButton;
+
+    private float vel = 35f; // Initial velocity of the ball.
     private float some_value = 0f;
     private int score = 0;
+    private int successfulHit = 0;
+    private bool isLevelEnded = false;
 
 
     void Start()
@@ -59,13 +61,13 @@ public class GameController : MonoBehaviour
         float xPos = (width / 2) - rightPading - (buttonWidth / 2);
         float yPos = (height / 2) - topPadding - (buttonHeight / 2);
 
-        GameObject button = Instantiate(restartButtonObject, canvas.transform);
-        RectTransform rectTransform = button.GetComponent<RectTransform>();
+        restartButton = Instantiate(restartButtonObject, canvas.transform);
+        RectTransform rectTransform = restartButton.GetComponent<RectTransform>();
 
         rectTransform.localPosition = new Vector3(xPos, yPos, 0);
         rectTransform.sizeDelta = new Vector2(buttonWidth, buttonHeight);
 
-        button.GetComponent<Button>().onClick.AddListener(RestartGame);
+        restartButton.GetComponent<Button>().onClick.AddListener(RestartGame);
     }
 
     void AddStars() {
@@ -94,7 +96,6 @@ public class GameController : MonoBehaviour
     }
 
     public void RestartGame() {
-        Debug.Log("Restarting Game");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -103,6 +104,10 @@ public class GameController : MonoBehaviour
             Score();
         }
         ActivateSlowMotion(1f, 0.05f);
+        successfulHit += 1;
+        if (successfulHit > numberOfTargets - 1) {
+            Invoke("EndLevel", 1f);
+        }
         Invoke("TurnCameraLeft", 0.5f);
         some_value -= 90;
     }
@@ -130,15 +135,28 @@ public class GameController : MonoBehaviour
         Time.fixedDeltaTime = 0.02f;
     }
 
+    void EndLevel() {
+        isLevelEnded = true;
+        GameObject endPanel = Instantiate(endLevelPanel, canvas.transform);
+        Button playAgain = endPanel.transform.Find("Play Again Button").gameObject.GetComponent<Button>();
+        playAgain.onClick.AddListener(RestartGame);
+        restartButton.SetActive(false);
+    }
+
     void TurnCameraLeft() {
         GameObject ball = GetBall();
         GameObject camera = GameObject.Find("Main Camera");
-        camera.GetComponent<CameraController>().TurnAround(ball, -90f);
+        camera.GetComponent<CameraController>().TurnAround(GameObject.Find("Base Platform"), -90f);
     }
 
     void CalculateProjections() {
         GameObject ball = GetBall();
-        Vector3 v = ball.transform.forward * vel; // Velocity of the ball
+
+        // Check if we are trying to calculate projection for ball already in motion
+        Rigidbody ballsRB = ball.GetComponent<Rigidbody>();
+        if (ballsRB.velocity.magnitude > 1) { return; }
+
+        Vector3 v = ball.transform.forward * vel; // Initial velocity vector of the ball
         float time, distance;
         (distance, time) = GetDistanceAndTime();
         if (time == 0) {
@@ -246,12 +264,30 @@ public class GameController : MonoBehaviour
     }
 
     void SpawnBall() {
+        ballClones.Clear();
         GameObject ball = Instantiate(ballObject);
         ballClones.Add(ball);
     }
 
-    Vector2 touchBeganPosition, touchMovedPosition, touchEndedPosition;
+    void FireBall() {
+        GameObject ball = GetBall();
+        Rigidbody ballsRB = ball.GetComponent<Rigidbody>();
+        if (ballsRB.velocity.magnitude > 1) { return; }
+        ballsRB.isKinematic = false;
+        ballsRB.AddForce(ball.transform.forward * vel, ForceMode.VelocityChange);
+        Destroy(ball, 2f);
+        projectionPositions.Clear();
+    }
+
+    private Vector2 touchBeganPosition, touchMovedPosition, touchEndedPosition;
     void Update() {
+        if (isLevelEnded) { return; }
+
+        GameObject activeBall = GameObject.FindWithTag("Ball");
+        if (!activeBall) {
+            SpawnBall();
+        }
+
         if (Input.touchCount > 0) {
 
             Touch touch = Input.GetTouch(0);
@@ -270,15 +306,9 @@ public class GameController : MonoBehaviour
                     break;
 
                 case TouchPhase.Ended:
-
                     touchEndedPosition = touch.position;
 
-                    GameObject ball = GetBall();
-                    Rigidbody ballsRB = ball.GetComponent<Rigidbody>();
-                    ballsRB.isKinematic = false;
-                    ballsRB.AddForce(ball.transform.forward * vel, ForceMode.VelocityChange);
-                    Destroy(ball, 3f);
-                    Invoke("SpawnBall", 0.5f);
+                    FireBall();
                     DeletePreviousProjections();
                     break;
             }
