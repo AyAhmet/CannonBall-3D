@@ -4,17 +4,27 @@ CannonBall 3D is a mobile game made with Unity. Game has only one level and in p
 
 ## Installation
 
-Clone the repository to your computer. Open the project with Unity and give it a run!
+Clone the repository to your computer. Simply open the project with Unity.
 
 ```bash
 git clone https://github.com/AyAhmet/CannonBall-3D.git
 ```
+Android:
+   - Create an APK file (File -> Build Settings -> Android -> Build) and use that file to install game on your device.
 
-## Usage
+iOS:
+   - Export the project into Xcode (File -> Build Settings -> iOS -> Switch Platform -> Build) and open it with Xcode.
+   - From Project Navigator, select project's name, go into Signing & Capabilities, select 'Automatically manage signing'. Also, select your Team (It's most probably your personal team)
+   - Select your physical device and Run.
+   - In your iOS device, go into Settings -> General -> Device Management -> Trust </Signing ID>
+   - Now you can run the game on your device.
+
+
+## Testing
 
 Game detects only touch inputs. You must have an Android or iOS device to play the game.
+   - You can use Unity Remote 5 to simply running the game on your PC and use your Android/iOS device to give inputs, for test purposes.
 
-Android:
 
 ## Screenshots
 
@@ -24,10 +34,7 @@ Android:
 <a href="https://ibb.co/RCLLmfJ"><img src="https://i.ibb.co/jL772mj/Screenshot-2020-01-20-at-17-51-28.png" alt="Screenshot-2020-01-20-at-17-51-28" border="0"></a>
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
+This repository is currently read-only. You can fork this project to your own repository and make any changes to it. 
 
 ## Unity Version
 Unity Version: 2019.2.16f1
-[MIT](https://choosealicense.com/licenses/mit/)
