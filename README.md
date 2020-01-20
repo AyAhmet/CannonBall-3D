@@ -26,6 +26,9 @@ Game detects only touch inputs. You must have an Android or iOS device to play t
 
 ## Gameplay Video
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=jzmupYcpwhM" target="_blank"><img src="http://img.youtube.com/vi/jzmupYcpwhM/0.jpg" 
+alt="CannonBall 3D Gameplay" width="900" height="1600" border="10" /></a>
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/jzmupYcpwhM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Screenshots
