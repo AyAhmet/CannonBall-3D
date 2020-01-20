@@ -19,12 +19,14 @@ iOS:
    - In your iOS device, go into Settings -> General -> Device Management -> Trust </Signing ID>
    - Now you can run the game on your device.
 
-
 ## Testing
 
 Game detects only touch inputs. You must have an Android or iOS device to play the game.
    - You can use Unity Remote 5 to simply running the game on your PC and use your Android/iOS device to give inputs, for test purposes.
 
+## Gameplay Video
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jzmupYcpwhM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Screenshots
 
